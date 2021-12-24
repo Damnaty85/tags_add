@@ -59,10 +59,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const fieldSets = document.querySelectorAll('.fieldset')
 
-    fieldSets[0].insertAdjacentHTML('beforeend', inputTemplate('Выберите ингредиент', 'Начните вводить слово.', 'ingridient-list', 'input', 'ingridients', arrayItem))
+    fieldSets[0].insertAdjacentHTML('beforeend', inputTemplate('Выберите ингредиент', 'Начните вводить слово.', 'ingridient-list', 'input-ingridient', 'ingridients', arrayItem))
     fieldSets[0].insertAdjacentHTML('afterbegin', resultTemplate('Добавьте ингридиенты', 'result', 'ingridients'));
 
-    fieldSets[1].insertAdjacentHTML('beforeend', inputTemplate('Выберите меню', 'Начните вводить слово.', 'menu-list', 'input', 'menu', arrayMenu, false))
+    fieldSets[1].insertAdjacentHTML('beforeend', inputTemplate('Выберите меню', 'Начните вводить слово.', 'menu-list', 'input-menu', 'menu', arrayMenu, false))
     fieldSets[1].insertAdjacentHTML('afterbegin', resultTemplate('Добавьте меню', 'result', 'menu'));
 
     function insertComma(string) {

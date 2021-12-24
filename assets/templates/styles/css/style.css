@@ -46,6 +46,7 @@
   background-color: #3d4752;
   margin-left: 4px;
   margin-bottom: 4px;
+  display: inline-flex;
 }
 .result span img {
   width: 15px;
