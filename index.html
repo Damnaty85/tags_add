@@ -6,8 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Added tags</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <style>
+    * {
+        font-family: -apple-system, 'Roboto', sans-serif;
+    }
     .visual-hidden {
         opacity: 0;
         width: 0;
@@ -26,17 +32,48 @@
     }
     
     label#result span {
-        display: flex;
-        padding: 3px 5px;
-        font-size: 13px;
+        position: relative;
+        -webkit-tap-highlight-color: transparent;
+        margin: 0px;
+        user-select: none;
+        appearance: none;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 0.8125rem;
+        display: inline-flex;
+        -webkit-box-align: center;
         align-items: center;
+        -webkit-box-pack: center;
         justify-content: center;
-        background-color: #ebebeb;
-        margin-left: 3px;
-        border-radius: 19px;
-        margin-bottom: 3px;
+        height: 32px;
+        border-radius: 16px;
+        white-space: nowrap;
+        transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        cursor: default;
+        outline: 0px;
+        text-decoration: none;
+        border: 0px;
+        padding: 0px 10px;
+        vertical-align: middle;
+        box-sizing: border-box;
+        color: rgb(255, 255, 255);
+        background-color: rgb(61, 71, 82);
+        margin-left: 4px;
+        margin-bottom: 4px;
     }
-    
+    input {
+        box-sizing: border-box;
+        cursor: text;
+        display: inline-flex;
+        -webkit-box-align: center;
+        align-items: center;
+        position: relative;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.23);
+        height: 35px;
+        max-width: 200px;
+        width: 100%;
+        padding-left: 10px;
+    }
     label#result span img {
         width: 15px;
         height: 15px;
@@ -45,6 +82,75 @@
         box-sizing: border-box;
         margin-left: 6px;
         cursor: pointer;
+        background-color: rgb(135, 150, 165);
+    }
+
+    .text-field {
+        position: relative;
+    }
+
+    .text-field label {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 10px;
+        font-size: 12px;
+        color: grey;
+        transition: 0.2s;
+    }
+
+    input:focus + label {
+        transform: translateY(-23px);
+        background: white;
+        box-sizing: border-box;
+        font-size: 10px;
+        padding: 0 3px;
+    }
+
+    .text-field span {
+        font-size: 11px;
+        position: absolute;
+        bottom: -17px;
+        left: 10px;
+    }
+
+    button.add {
+        display: inline-flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        justify-content: center;
+        position: relative;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        outline: 0px;
+        border: 0px;
+        margin: 0px;
+        cursor: pointer;
+        user-select: none;
+        vertical-align: middle;
+        appearance: none;
+        text-decoration: none;
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 500;
+        font-size: 0.8rem;
+        line-height: 1.75;
+        letter-spacing: 0.02857em;
+        text-transform: uppercase;
+        min-width: 64px;
+        padding: 6px 16px;
+        border-radius: 4px;
+        transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        color: rgb(255, 255, 255);
+        background-color: rgb(25, 118, 210);
+        box-shadow: rgb(0 0 0 / 20%) 0px 3px 1px -2px, rgb(0 0 0 / 14%) 0px 2px 2px 0px, rgb(0 0 0 / 12%) 0px 1px 5px 0px;
+        height: 35px;
+    }
+
+    button.add:hover {
+        text-decoration: none;
+        background-color: rgb(21, 101, 192);
+        box-shadow: rgb(0 0 0 / 20%) 0px 2px 4px -1px, rgb(0 0 0 / 14%) 0px 4px 5px 0px, rgb(0 0 0 / 12%) 0px 1px 10px 0px;
     }
 </style>
 
