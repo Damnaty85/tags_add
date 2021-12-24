@@ -10,39 +10,60 @@ document.addEventListener("DOMContentLoaded", function() {
         'Мелисса', 'Мидии', 'Миндаль', 'Минеола', 'Минтай', 'Морковь', 'Мороженое', 'Морошка', 'Моцарелла', 'Мюсли', 'Мясо', 'Мята', 'Навага', 'Налим', 'Напиток'
     ];
 
+    const arrayMenu = ['Основное меню', 'Вторые блюда', 'Выпечка', 'Гарниры', 'Закуски', 'Кондитерские изделия', 'Напитки', 'Постное', 'Салаты', 'Супы']
+
     if(!localStorage.getItem('Ingredients')){
         localStorage.setItem('Ingredients', JSON.stringify(array))
     }
 
-    function inputTemplate(listId, labelStr, inputId, inputName, helper, arrayIngredients) {
+    const arrayItem = JSON.parse(localStorage.getItem('Ingredients'))
+
+    function fieldSetTemplate([...rest], selector = 'fieldset') {
+        return `
+            ${[...rest].map(it => `<div class="${selector}"></div>`).join("")}
+        `
+    }
+
+    function spanTemplate(title) {
+        return `<span>${title}<img src="https://img.icons8.com/material-rounded/24/3d4752/multiply.png" onclick="this.parentNode.remove()"/></span>`
+    }
+
+    function inputTemplate(placeholder, helper, listId, inputId, inputName, arrayIngredients, isAdd = true) {
         return `
             <div class="text-field">
-                <input list="${listId}" id="${inputId}" name="${inputName}" />
-                <label for="${inputId}">${labelStr}</label>
+                <input list="${listId}" id="${inputId}" name="${inputName}" class="data-list__input"/>
+                <label for="${inputId}">${placeholder}</label>
                 <span>${helper}</span>
-                <button class="add">Добавить</button>
+                ${isAdd === true ? `<button class="add">Добавить</button>` : ''}
                 ${dataListTemplate(listId, arrayIngredients)}
             </div>
         `
     }
 
     function dataListTemplate(listId, arrayIngredients) {
-        const arrayItem = JSON.parse(localStorage.getItem(arrayIngredients))
         return `
             <datalist id="${listId}">
-                ${arrayItem.map(it => `<option value="${it}"></option>`).join('')}
+                ${arrayIngredients.map(it => `<option value="${it}"></option>`).join('')}
             </datalist>
         `
     }
 
-    app.insertAdjacentHTML('beforeend', inputTemplate('ingridient-list', 'Выберите ингредиент', 'input', 'ingridients', 'Начните вводить слово.', 'Ingredients'))
-    app.insertAdjacentHTML('afterbegin', `<p>Добавьте ингридиенты</p><label for="result-input" id="result"></label>`);
-    app.insertAdjacentHTML('beforeend', `<input class="visual-hidden" id="result-input" type="text" value="">`);
+    function resultTemplate(title, inputId, name) {
+        return `
+            <p>${title}</p><label for="${inputId}" class="result"></label>
+            <input class="visual-hidden result-input" id="${inputId}" name="${name}" type="text" value="">
+        `
+    }
 
-    const innput = document.getElementById('input');
-    const result = document.getElementById('result');
-    const resultInput = document.getElementById('result-input');
-    const addButton = document.querySelector("button.add")
+    app.insertAdjacentHTML('beforeend', fieldSetTemplate([array, arrayMenu]))
+
+    const fieldSets = document.querySelectorAll('.fieldset')
+
+    fieldSets[0].insertAdjacentHTML('beforeend', inputTemplate('Выберите ингредиент', 'Начните вводить слово.', 'ingridient-list', 'input', 'ingridients', arrayItem))
+    fieldSets[0].insertAdjacentHTML('afterbegin', resultTemplate('Добавьте ингридиенты', 'result', 'ingridients'));
+
+    fieldSets[1].insertAdjacentHTML('beforeend', inputTemplate('Выберите меню', 'Начните вводить слово.', 'menu-list', 'input', 'menu', arrayMenu, false))
+    fieldSets[1].insertAdjacentHTML('afterbegin', resultTemplate('Добавьте меню', 'result', 'menu'));
 
     function insertComma(string) {
         string = string.toString();
@@ -51,38 +72,51 @@ document.addEventListener("DOMContentLoaded", function() {
         return string;
     }
 
-    innput.addEventListener('input', function() {
-        let thisValue = this.value;
-        const option = document.getElementById('ingridient-list').childNodes;
-
-        const regexp = /(<([^>]+)>)/ig;
-
-        for (var i = 0; i < option.length; i++) {
-            if (option[i].value === thisValue) {
-                const selectedOPtion = option[i].value
-                this.value = "";
-                if (result.textContent.length === 0) {
-                    result.innerHTML = `<span>${selectedOPtion}<img src="https://img.icons8.com/material-rounded/24/000000/multiply.png"/></span>`;
-                } else {
-                    const prevVal = result.innerHTML;
-                    if(!prevVal.replace(regexp,'').includes(selectedOPtion)) {
-                        result.innerHTML = prevVal + `<span>${selectedOPtion}<img src="https://img.icons8.com/material-rounded/24/000000/multiply.png"/></span>`
-                        resultInput.value = [prevVal, selectedOPtion].join(", ").replace(regexp,'')
-                        resultInput.value = insertComma(resultInput.value)
-                    }
-                    console.log(resultInput.value)
-                    result.childNodes.forEach((item) => {
-                        item.querySelector("img").addEventListener('click', () => {
-                            item.remove()
-                        })
-                    })
+    fieldSets.forEach((it) => {
+        const input = it.querySelector('.data-list__input');
+        input.addEventListener('input', function() {
+            let thisValue = this.value;
+            const options = it.querySelector('datalist').childNodes;
+            const result = it.querySelector('.result');
+            const resultInput = it.querySelector('.result-input');
+        
+            const regexp = /(<([^>]+)>)/ig;
+        
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].value === thisValue) {
+                    const selectedOption = options[i].value
+                    this.value = "";
+                    if (result.textContent.length === 0) {
+                            result.innerHTML = spanTemplate(selectedOption);
+                        } else {
+                            const prevVal = result.innerHTML;
+    
+                            if(!prevVal.replace(regexp,'').includes(selectedOption)) {
+                                result.innerHTML = prevVal + spanTemplate(selectedOption)
+                                resultInput.value = [prevVal, selectedOption].join(", ").replace(regexp,'')
+                                resultInput.value = insertComma(resultInput.value)
+                            }
+                        }
+                    break;
                 }
-                break;
             }
-        }
-    })
+        })
 
-    addButton.addEventListener('click', function() {
-        console.log("click")
+        if(it.querySelector("button.add")) {
+            const addButton = it.querySelector("button.add")
+
+            addButton.addEventListener('click', function() {
+                let currentValue = input.value;
+                let currentArray = JSON.parse(localStorage.getItem('Ingredients'))
+                if (currentValue !== "") {
+                    currentArray.push(currentValue)
+                        console.log(currentArray)
+                        localStorage.setItem('Ingredients', JSON.stringify(currentArray))
+                    
+                }
+                
+                input.value = ""
+            })
+        }
     })
 })
